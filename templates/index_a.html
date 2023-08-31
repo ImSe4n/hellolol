@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>FakeNews</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="static/css/styles.css" rel="stylesheet" />
+    </head>
+    <body>
+        <!-- Responsive navbar-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a href="https://www.ai-camp.org/" target="_blank">
+                  <img src="static/css/aicamplogo.png" alt="AI Camp" width="100" height="100">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{url_for('index_a')}}">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{url_for('about')}}">About Us</a></li>
+                       <li class="nav-item"><a class="nav-link" href="{{url_for('team')}}">Team Members</a></li>
+                       <li class="nav-item"><a class="nav-link" href="{{url_for('chatbot')}}">Chatbot</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- Page content-->
+        <div class="container" id="infobit">
+          <div class="jumbotron">
+            <div class="text-center mt-5">
+                <h1>Welcome to VeracityCheck</h1>
+                <p class="lead">An AI powered solution to Misinformation</p>
+                <br>
+                <p>New Here? Enter the news headline you want to check below, and our AI Model will tell you whether it can be trusted or not.</p>
+ <!-- <h1 class="display-4">Welcome to VeracityCheck</h1> -->
+  
+          </div>
+        </div>
+      </div>
+                <br>
+      <div class="text-center mt-5" id="generator">
+                <form action='/generated' method = 'post'>
+                  <label for="userinput">Enter Headline Here</label>
+    <textarea class="form-control" id="input" name ="input" rows="2"></textarea>
+                  <button type="submit" class="btn btn-primary mb-2">Verify</button>
+                </form>
+      </div>
+      <br>
+      <div class="text-center mt-5" id="generator">
+        
+        <label for="output">Real or Fake?</label>
+      <textarea class="form-control" id="exampleFormControlTextarea2" rows="2">{{output}}</textarea>
+
+      </div>
+      
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+    </body>
+</html>

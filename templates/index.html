@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Let's Chat</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+  .container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  .chat-box {
+    width: 100%;
+    border: 1px solid #ccc;
+    padding: 10px;
+    max-height: 400px;
+    overflow-y: scroll;
+    background-color: #fff;
+  }
+  .user-message {
+    width: 100%;
+    background-color: #e2f0cb;
+    padding: 5px 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+  }
+  .bot-message {
+    background-color: #c1e1ff;
+    padding: 5px 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+  }
+  .input-container {
+        textarea {
+  width: 100%;
+}
+    width: 100%;
+    display: flex;
+    margin-top: 20px;
+  }
+  input[type="text"] {
+    textarea {
+  width: 100%;
+}
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px 0 0 5px;
+  }
+  button {
+    background-color: #007bff;
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+  }
+    .footer-links {
+            text-align: center;
+            margin-top: 20px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #f0f0f0;
+            padding: 10px 0;
+        }
+
+        .footer-links a {
+            margin: 0 10px;
+    }
+    .header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #007bff;
+    padding: 10px 20px;
+    color: #fff;
+  }
+
+  .logo {
+    display: inline-block;
+    text-decoration: none;
+    color: #fff;
+  }
+
+  .logo img {
+    height: 40px;
+    vertical-align: middle;
+  }
+
+  .dropdown {
+    position: relative;
+    display: inline-block;
+    margin-right: 20px;
+  }
+
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+
+  .dropdown-content a:hover {
+    background-color: #f1f1f1;
+  }
+    input[type="text"],
+  textarea {
+    width: 100%;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <a class="logo" href="https://www.ai-camp.org/">
+      <img src="static/css/aicamplogo.png" alt="AI Camp Logo">
+    </a>
+  </div>
+  <div class="container">
+    <h1>Let's Chat!</h1>
+    <div class="chat-box" id="chatBox">
+      <div class="bot-message">Hello! How can I assist you today?</div>
+    </div>
+    <div class="input-container">
+    </div>
+      <div class="text-center mt-5" id="generator">
+        <form method="POST" enctype="application/x-www-form-urlencoded" class="d-flex">
+        <input type="text" name="query" id="userInput" class="flex-grow-1" placeholder="Type your message...">
+        <button type="button" id="sendButton">Send</button>
+        </form>
+        <label for="output">Answer:</label>
+      <textarea class="form-control" id="exampleFormControlTextarea2" rows="2">{{output}}</textarea>
+    <div class="footer-links">
+      <a href="about" target="_blank">About Us</a>
+      <a href="https://github.com/Sunil-Rufus/news_data/tree/Griffin" target="_blank">GitHub</a> 
+    </div>
+  </div>
+  <script>
+    let chatHistory = [];
+    function appendToChatHistory(message, sender) {
+        chatHistory.push({ message, sender });
+    }
+    function displayChatHistory() {
+        chatBox.innerHTML = "";
+        chatHistory.forEach(({ message, sender }) => {
+            appendMessage(message, sender);
+        });
+    }
+    sendButton.addEventListener("click", () => {
+    const userMessage = userInput.value.trim();
+    if (userMessage !== "") {
+        appendToChatHistory(userMessage, "user");
+        displayChatHistory();
+        userInput.value = "";
+        appendMessage("...", "bot");
+
+        fetch("/", {
+            method: "POST",
+            body: new URLSearchParams({ query: userMessage }),
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+        })
+        .then(response => response.json())  // Parse JSON response
+        .then(response => {
+            const botResponse = response['answers'][0].answer; // Extract the answer from the response
+            appendToChatHistory(botResponse, "bot"); // Store bot's response in chat history
+            displayChatHistory(); // Update chatbox with full chat history
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+    }
+});
+    function appendMessage(message, sender) {
+        const messageElement = document.createElement("div");
+        messageElement.classList.add(sender === "user" ? "user-message" : "bot-message");
+        messageElement.textContent = message;
+        chatBox.appendChild(messageElement);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+  </script>
+</body>
+</html>
